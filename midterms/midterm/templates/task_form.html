@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/midterm/update" method="post">
+        {% csrf_token %}
+        <label for="title">Task Title:</label><br>
+        <input type="text" id="title" required name="title" value="{{ task.title }}"><br>
+        
+        <label for="description">Description:</label><br>
+        <input type="text" id="description" required name="description" value="{{ task.description }}"><br>
+
+        <label for="assigned_personnel">Assigned Personnel:</label><br>
+        <input type="text" id="assigned_personnel" required name="assigned_personnel" value="{{ task.assigned_personnel }}"><br>
+
+        <label for="due_date">Due Date:</label><br>
+        <input type="date" id="due_date" required name="due_date" value="{{ task.due_date }}"><br>
+
+        <input type="status" id="status" name="status" value="{{ task.status }}">
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

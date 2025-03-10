@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Add Task Here!</h1>
+    <form action="/midterm/save" method="post">
+        {% csrf_token %}
+        <label for="title">Task Title:</label><br>
+        <input type="text" id="title" placeholder="title" required name="title"><br>
+        
+        <label for="description">Description:</label><br>
+        <input type="text" id="description" required placeholder="Description" name="description"><br>
+
+        <label for="assigned_personnel">Assigned Personnel:</label><br>
+        <input type="text" id="assigned_personnel" required placeholder="assigned_personnel" name="assigned_personnel"><br>
+
+        <label for="due_date">Due Date:</label><br>
+        <input type="date" id="due_date" required placeholder="due_date" name="due_date"><br>
+
+        <input type="status" id="status" name="status" value="Upcoming">
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <table>
+    <div>
+        <tr>
+            <th>No.</th>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Assigned Personnel</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </div>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ forloop.counter }} </td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.assigned_personnel }}</td>
+            <td>{{ task.due_date }}</td>
+            <td>{{ task.status }}</td>
+            <td>
+                <a href="edit/{{ task.id }}">Edit</a>
+                <a href="delete/{{ task.id }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
