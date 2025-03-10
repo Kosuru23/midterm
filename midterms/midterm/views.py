@@ -29,8 +29,8 @@ def task_create(request):
     else:
         status = "Upcoming"
 
-        newTask = Task(title = title, description = description, due_date = due_date, status=status)
-        newTask.save()
+    newTask = Task(title = title, description = description, due_date = due_date, status=status)
+    newTask.save()
             
     return redirect('/midterm/')
 
