@@ -5,22 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+a {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+a:hover {
+    background: #0056b3;
+}
+
+form {
+    background: white;
+    width: 50%;
+    margin: 40px auto;
+    padding: 30px;
+    padding-left: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 25px;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="description"],
+input[type="date"] {
+    width: 96.8%;
+    padding: 14px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background: #218838;
+}
+</style>
 <body>
-    <form action="/midterm/update" method="post">
+    <a href="{% url 'task_list' %}">Go back</a>
+    
+    <form action="{% if task %}{% url 'task_update' task.id %}{% else %}{% url 'task_create' %}{% endif %}" method="post">
         {% csrf_token %}
         <label for="title">Task Title:</label><br>
         <input type="text" id="title" required name="title" value="{{ task.title }}"><br>
         
         <label for="description">Description:</label><br>
-        <input type="text" id="description" required name="description" value="{{ task.description }}"><br>
-
-        <label for="assigned_personnel">Assigned Personnel:</label><br>
-        <input type="text" id="assigned_personnel" required name="assigned_personnel" value="{{ task.assigned_personnel }}"><br>
+        <input type="text" id="description" name="description" value="{{ task.description }}"><br>
 
         <label for="due_date">Due Date:</label><br>
-        <input type="date" id="due_date" required name="due_date" value="{{ task.due_date }}"><br>
-
-        <input type="status" id="status" name="status" value="{{ task.status }}">
+        <input type="date" id="due_date" required name="due_date" value="{{ task.due_date|date:'Y-m-d' }}"><br>
 
         <input type="submit" value="Submit">
     </form>

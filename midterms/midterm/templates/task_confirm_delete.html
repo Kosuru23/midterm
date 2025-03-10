@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"] {
+    background: #dc3545;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background: #c82333;
+}
+
+a button {
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+}
+
+a button:hover {
+    background: #218838;
+}
+</style>
+<body>
+    <h2>Are you sure you want to delete "{{ task.title }}"?</h2>
+
+<form method="POST" action="{% url 'task_delete' task.id %}">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+</form>
+
+<a href="{% url 'task_list' %}"><button>No, Go Back</button></a>
+</body>
+</html>

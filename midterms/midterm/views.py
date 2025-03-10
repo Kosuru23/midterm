@@ -1,44 +1,76 @@
 from django.shortcuts import render, redirect
+from datetime import date
 from .models import Task
 
 # Create your views here.
 
-def task(request):
+# Show the list of task in task_list.html
+def task_list(request):
     tasks = Task.objects.all()
     return render(request, 'task_list.html', {'tasks': tasks})
 
-def save(request):
-        title = request.POST['title']
-        description = request.POST['description']
-        assigned_personnel = request.POST['assigned_personnel']
-        due_date = request.POST['due_date']
-        status = request.POST['status']
+# Open the task_form.html to create the task
+def task_form(request):
+    return render(request, 'task_form.html')
 
-        newTask = Task(title = title, description = description, assigned_personnel = assigned_personnel, due_date = due_date, status = status)
+# Create the task in task_form.html
+def task_create(request):
+    
+    title = request.POST['title']
+    description = request.POST['description']
+    due_date = request.POST['due_date']
+
+    due_date = date.fromisoformat(due_date)
+    today = date.today()
+    if due_date < today:
+        status = "Overdue"
+    elif due_date == today:
+        status = "Due Today"
+    else:
+        status = "Upcoming"
+
+        newTask = Task(title = title, description = description, due_date = due_date, status=status)
         newTask.save()
-                
-        return redirect('/midterm/task')
+            
+    return redirect('/midterm/')
 
-def edit(request, id):
+# Update / Edit the task in task_form.html
+def task_update(request, id):
+    task = Task.objects.get(id=id)  # Get task or return 404 if not found
+
+    if request.method == "POST":
+        task.title = request.POST['title']
+        task.description = request.POST['description']
+        task.due_date = request.POST['due_date']
+
+        task.due_date = date.fromisoformat(task.due_date)
+        today = date.today()
+        
+        if task.due_date < today:
+            task.status = "Overdue"
+        elif task.due_date == today:
+            task.status = "Due Today"
+        else:
+            task.status = "Upcoming"
+
+        task.save()  # Save the updates
+        return redirect('/midterm/')  # Redirect back to task list
+
+    return render(request, 'task_form.html', {'task': task})  # Show form with existing data
+
+# Opens the task_confirm_delete.html to ask the user to confirm deletion
+def confirm_delete(request, id):
     task = Task.objects.get(id=id)
-    return render(request, 'task_form.html', {'task': task})
+    return render(request, 'task_confirm_delete.html', {'task': task})
 
-def update(request, id):
-    task = Task.objects.get(id=id)
-    task.title = request.POST['title']
-    task.description = request.POST['description']
-    task.assigned_personnel = request.POST['assigned_personnel']
-    task.due_date = request.POST['due_date']
-    task.status = request.POST['status']
-    task.save()
-
-    task = Task.objects.all()
-    return redirect('/midterm/task')
-
-def delete(request, id):
+# Deletes the task
+def task_delete(request, id):
     task = Task.objects.get(id=id)
     task.delete()
-    return redirect('/midterm/task')
+    return redirect('/midterm/')
+
+
+    
 
 
 
